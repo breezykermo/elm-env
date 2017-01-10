@@ -1,22 +1,29 @@
 ## Elm Env
 
-Elm-Env dockerizes an Elm environment, built from source inside the container. This is useful to not have to struggle through all of Haskell and Cabal's installation/environment difficulties on your local, and it also allows you to run (and play with) the Elm source code in an isolated process.
+Elm Env provides an easy way to run an Elm environment from its Haskell source, inside a Docker container. Cabal can be difficult to get installed, especially because certain versions of Elm require different Haskell versions. [Elm-platform](https://github.com/elm-lang/elm-platform) provides a useful way to install different versions of Elm from source. However, if you just want to tinker with the source code for a bit of Friday fun, and don't want it to mess with the current version/installation of Elm on your computer, elm-env is for you!
 
-The docker image is available on Docker Hub:
+### Easy Install
+Provided you already have [Docker](https://docs.docker.com/engine/installation/) installed, all you need to do is run:
 `docker run -it breezykermo/elm-env`
+After docker has fetched the image from Docker Hub, your container should start and you will be inside a Linux bash shell in a Docker container, with the Elm environment 0.18 code in the `Elm-Package` directory.
+
+### Using other versions of Elm
+To install other versions of Elm, run the `BuildFromSource.hs` script provided:
+`runhaskell BuildFromSource.hs <version-no>`
+where `<version-no>` is the version you want to install. The script will complain if you try with a version that doesn't exist.
 
 ## Using Elm Env for Development
-Elm Env was developed in order to facilitate modifying the Elm codebases to create your own custom builds of it. To set up a productive development environment, you'll want to map the source files in the Docker container to your local as volumes, so that you can edit them through a text editor (unless, of course, your preferred text editor is [nano](https://en.wikipedia.org/wiki/GNU_nano)).
+Unless your preferred text editor is [nano](https://en.wikipedia.org/wiki/GNU_nano), you'll want to map the source files in the Docker container to your local as volumes, so that you can view and edit them through a different text editor.
 
-To do this, copy the files from inside a running _elm-env_ container to this directory, as *src*:
+To do this, copy the files from inside a running _elm-env_ container to an outer directory, as *src*:
 `docker cp $(CONTAINER_ID):/Elm-Package/Elm-Platform . && mv Elm-Platform src`
 replacing `$(CONTAINER_ID)` with your _elm-env_ instance's container ID.
 
-You can then run _elm-env_ with these files as volumes easily through the [Docker-Compose](https://docs.docker.com/compose/) file provided:
+If you have [Docker Compose](https://docs.docker.com/compose/install/), You can then run _elm-env_ with these files as volumes easily through the [Docker-Compose](https://docs.docker.com/compose/) file provided:
 `docker-compose run --rm elm-env`
 
-Once the container is stopped, it can be restarted through the same docker-compose command above, or directly through docker with:
-`docker start -i $(CONTAINER_ID)`
+Alternatively, you can run the container with the `src` directory as a volume directly through this command:
+`docker start -i -v src:/Elm-Package/Elm-Platform $(CONTAINER_ID)`
 
-#### Configuring source repos
-You can easily build custom Docker images with your own forks of the various Elm codebases, by modifying [BuildFromSource.hs](./BuildFromSource.hs). 
+#### Installing Elm versions from custom source repos
+You can easily build custom Docker images with your own forks of the various Elm codebases, by modifying [BuildFromSource.hs](./BuildFromSource.hs). The [Dockerfile](./Dockerfile) simply runs the [BuildFromSource.hs](./BuildFromSource.hs) script and puts what is generated in an image.

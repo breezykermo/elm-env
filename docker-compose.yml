@@ -1,0 +1,9 @@
+version: '2'
+services:
+  elm-env:
+    stdin_open: true
+    tty: true
+    image: breezykermo/elm-env
+    volumes:
+      - ./src:/Elm-Package/Elm-Platform
+    command: bash

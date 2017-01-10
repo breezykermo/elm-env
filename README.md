@@ -1,4 +1,5 @@
-## Elm Env
+<div align="center"><img height=100 width=100 src="https://ih1.redbubble.net/image.171623651.0580/sticker,375x360.png"></div>
+<h1 align="center">Elm Env</h1>
 
 Elm Env provides an easy way to run an Elm environment from its Haskell source, inside a Docker container. Cabal can be difficult to get installed, especially because certain versions of Elm require different Haskell versions. [Elm-platform](https://github.com/elm-lang/elm-platform) provides a useful way to install different versions of Elm from source. However, if you just want to tinker with the source code for a bit of Friday fun, and don't want it to mess with the current version/installation of Elm on your computer, elm-env is for you!
 
